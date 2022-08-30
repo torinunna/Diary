@@ -154,8 +154,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="일기 작성" id="J9B-U3-xL0">
-                        <barButtonItem key="rightBarButtonItem" title="등록" id="7lS-GO-wDX"/>
+                        <barButtonItem key="rightBarButtonItem" title="등록" id="7lS-GO-wDX">
+                            <connections>
+                                <action selector="confirmPessed:" destination="Yv3-wF-fzh" id="Hvp-7a-XwG"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="confirmButton" destination="7lS-GO-wDX" id="yqA-jd-KWC"/>
+                        <outlet property="contentsTextView" destination="5oD-Li-qC6" id="IVB-fE-S9Y"/>
+                        <outlet property="dateTextField" destination="YHH-FW-0dG" id="2vA-ya-vfS"/>
+                        <outlet property="titleTextField" destination="0Yc-AA-Yvl" id="Qut-2I-HmT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Ua-9X-HyD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
