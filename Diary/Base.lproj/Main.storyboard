@@ -27,7 +27,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DiaryCell" id="XBS-Oe-AKG" customClass="DiaryCell" customModule="Diary" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="DiaryCell" reuseIdentifier="DiaryCell" id="XBS-Oe-AKG" customClass="DiaryCell" customModule="Diary" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="180" height="200"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ZML-zy-fp5">
@@ -58,6 +58,10 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="180" height="200"/>
+                                        <connections>
+                                            <outlet property="dateLabel" destination="wWp-aH-h6R" id="iZC-N6-mgw"/>
+                                            <outlet property="titleLabel" destination="yTg-pK-dph" id="obQ-6I-Bc1"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -78,6 +82,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="anG-sq-xGi" id="4co-h4-XPv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -156,7 +163,7 @@
                     <navigationItem key="navigationItem" title="일기 작성" id="J9B-U3-xL0">
                         <barButtonItem key="rightBarButtonItem" title="등록" id="7lS-GO-wDX">
                             <connections>
-                                <action selector="confirmPessed:" destination="Yv3-wF-fzh" id="Hvp-7a-XwG"/>
+                                <action selector="confirmPressed:" destination="Yv3-wF-fzh" id="0VV-s7-DL8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
