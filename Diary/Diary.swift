@@ -9,7 +9,7 @@ import Foundation
 
 struct Diary {
     var title: String
-    var contetns: String
+    var contents: String
     var date: Date
     var isFavorite: Bool
 }

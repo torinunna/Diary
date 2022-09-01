@@ -11,11 +11,16 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var diaryList = [Diary]()
+    private var diaryList = [Diary]() {
+        didSet {
+            self.saveDiaryList()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCollectionView()
+        self.loadDiaryList()
     }
     
     private func configureCollectionView() {
@@ -28,6 +33,29 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let writeDiaryViewController = segue.destination as? WriteDiaryViewController {
             writeDiaryViewController.delegate = self
+        }
+    }
+    
+    private func saveDiaryList() {
+        let data = self.diaryList.map {
+            [   "title": $0.title,
+                "contents": $0.contents,
+                "date": $0.date,
+                "isFavorite": $0.isFavorite]
+        }
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(data, forKey: "diaryList")
+    }
+    
+    private func loadDiaryList() {
+        let userDefaults = UserDefaults.standard
+        guard let data =  userDefaults.object(forKey: "diaryList") as? [[String: Any]] else { return }
+        self.diaryList = data.compactMap {
+            guard let title = $0["title"] as? String else { return nil }
+            guard let contents = $0["contents"] as? String else { return nil }
+            guard let date = $0["date"] as? Date else { return nil }
+            guard let isFavorite = $0["isFavorite"] as? Bool else { return nil }
+            return Diary(title: title, contents: contents, date: date, isFavorite: isFavorite)
         }
     }
     

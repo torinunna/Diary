@@ -56,7 +56,7 @@ class WriteDiaryViewController: UIViewController {
         guard let title = self.titleTextField.text else { return }
         guard let contents = self.contentsTextView.text else { return }
         guard let date = self.diaryDate else { return }
-        let diary = Diary(title: title, contetns: contents, date: date, isFavorite: false)
+        let diary = Diary(title: title, contents: contents, date: date, isFavorite: false)
         self.delegate?.didSelectConfirm(diary: diary)
         self.navigationController?.popViewController(animated: true)
     }
