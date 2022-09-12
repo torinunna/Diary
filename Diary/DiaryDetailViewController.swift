@@ -54,7 +54,13 @@ class DiaryDetailViewController: UIViewController {
     }
     
     @objc func favoritePressed() {
-        
+        guard let isFavorite = self.diary?.isFavorite else { return }
+        if isFavorite {
+            self.favoriteButton?.image = UIImage(systemName: "star")
+        } else {
+            self.favoriteButton?.image = UIImage(systemName: "star.fill")
+        }
+        self.diary?.isFavorite = !isFavorite
     }
     
     @IBAction func editPressed(_ sender: UIButton) {
