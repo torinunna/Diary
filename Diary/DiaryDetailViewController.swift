@@ -16,6 +16,7 @@ class DiaryDetailViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentsTextview: UITextView!
     @IBOutlet weak var dateLabel: UILabel!
+    var favoriteButton: UIBarButtonItem?
   
     weak var delegate: DiaryDetailViewDelegate?
     
@@ -32,6 +33,10 @@ class DiaryDetailViewController: UIViewController {
         self.titleLabel.text = diary.title
         self.contentsTextview.text = diary.contents
         self.dateLabel.text = self.dateToString(date: diary.date)
+        self.favoriteButton = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(favoritePressed))
+        self.favoriteButton?.image = diary.isFavorite ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
+        self.favoriteButton?.tintColor = .orange
+        self.navigationItem.rightBarButtonItem = self.favoriteButton
     }
     
     private func dateToString(date: Date) -> String {
@@ -46,6 +51,10 @@ class DiaryDetailViewController: UIViewController {
         guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
         self.diary = diary
         self.configureView()
+    }
+    
+    @objc func favoritePressed() {
+        
     }
     
     @IBAction func editPressed(_ sender: UIButton) {
