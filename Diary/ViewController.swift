@@ -133,4 +133,8 @@ extension ViewController: DiaryDetailViewDelegate {
         self.diaryList.remove(at: indexPath.row)
         self.collectionView.deleteItems(at: [indexPath])
     }
+    
+    func didSelectFavorite(indexPath: IndexPath, isFavorite: Bool) {
+        self.diaryList[indexPath.row].isFavorite = isFavorite
+    }
 }

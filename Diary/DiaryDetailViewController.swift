@@ -9,6 +9,7 @@ import UIKit
 
 protocol DiaryDetailViewDelegate: AnyObject {
     func didSelectDelete(indexPath: IndexPath)
+    func didSelectFavorite(indexPath: IndexPath, isFavorite: Bool)
 }
 
 class DiaryDetailViewController: UIViewController {
@@ -55,12 +56,14 @@ class DiaryDetailViewController: UIViewController {
     
     @objc func favoritePressed() {
         guard let isFavorite = self.diary?.isFavorite else { return }
+        guard let indexPath = self.indexPath else { return }
         if isFavorite {
             self.favoriteButton?.image = UIImage(systemName: "star")
         } else {
             self.favoriteButton?.image = UIImage(systemName: "star.fill")
         }
         self.diary?.isFavorite = !isFavorite
+        self.delegate?.didSelectFavorite(indexPath: indexPath, isFavorite: self.diary?.isFavorite ?? false)
     }
     
     @IBAction func editPressed(_ sender: UIButton) {
