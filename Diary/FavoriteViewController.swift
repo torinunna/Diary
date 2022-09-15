@@ -76,3 +76,13 @@ extension FavoriteViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: UIScreen.main.bounds.width - 20, height: 80)
     }
 }
+
+extension FavoriteViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let viewController = self.storyboard?.instantiateViewController(identifier: "DiaryDetailViewController") as? DiaryDetailViewController else { return }
+        let diary = self.diaryList[indexPath.row]
+        viewController.diary = diary
+        viewController.indexPath = indexPath
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+}
