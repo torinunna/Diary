@@ -7,19 +7,13 @@
 
 import UIKit
 
-protocol DiaryDetailViewDelegate: AnyObject {
-    func didSelectDelete(indexPath: IndexPath)
-    func didSelectFavorite(indexPath: IndexPath, isFavorite: Bool)
-}
-
 class DiaryDetailViewController: UIViewController {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentsTextview: UITextView!
     @IBOutlet weak var dateLabel: UILabel!
+    
     var favoriteButton: UIBarButtonItem?
-  
-    weak var delegate: DiaryDetailViewDelegate?
     
     var diary: Diary?
     var indexPath: IndexPath?
@@ -63,7 +57,13 @@ class DiaryDetailViewController: UIViewController {
             self.favoriteButton?.image = UIImage(systemName: "star.fill")
         }
         self.diary?.isFavorite = !isFavorite
-        self.delegate?.didSelectFavorite(indexPath: indexPath, isFavorite: self.diary?.isFavorite ?? false)
+        NotificationCenter.default.post(
+            name: NSNotification.Name("favoriteDiary"),
+            object: [
+                "isFavorite": self.diary?.isFavorite ?? false,
+                "indexPath": indexPath
+            ],
+            userInfo: nil)
     }
     
     @IBAction func editPressed(_ sender: UIButton) {
@@ -81,7 +81,10 @@ class DiaryDetailViewController: UIViewController {
     
     @IBAction func deletePressed(_ sender: UIButton) {
         guard let indexPath = self.indexPath else { return }
-        self.delegate?.didSelectDelete(indexPath: indexPath)
+        NotificationCenter.default.post(
+            name: NSNotification.Name("deleteDiary"),
+            object: indexPath,
+            userInfo: nil)
         self.navigationController?.popViewController(animated: true)
     }
     

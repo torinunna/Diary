@@ -26,6 +26,16 @@ class ViewController: UIViewController {
             selector: #selector(editDiaryNotification(_:)),
             name: NSNotification.Name("editDiary"),
             object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(favoriteDiaryNotification(_:)),
+            name: NSNotification.Name("favoriteDiary"),
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(deleteDiarynotification(_:)),
+            name: NSNotification.Name("deleteDiary"),
+            object: nil)
     }
     
     @objc func editDiaryNotification(_ notification: Notification) {
@@ -36,6 +46,19 @@ class ViewController: UIViewController {
             $0.date.compare($1.date) == .orderedDescending
         })
         self.collectionView.reloadData()
+    }
+    
+    @objc func deleteDiarynotification(_ notification: Notification) {
+        guard let indexPath = notification.object as? IndexPath else { return }
+        self.diaryList.remove(at: indexPath.row)
+        self.collectionView.deleteItems(at: [indexPath])
+    }
+    
+    @objc func favoriteDiaryNotification(_ notification: Notification) {
+        guard let favoriteDiary = notification.object as? [String: Any] else { return }
+        guard let isFavorite = favoriteDiary["isFavorite"] as? Bool else { return }
+        guard let indexPath = favoriteDiary["indexPath"] as? IndexPath else { return }
+        self.diaryList[indexPath.row].isFavorite = isFavorite
     }
     
     private func configureCollectionView() {
@@ -112,7 +135,6 @@ extension ViewController: UICollectionViewDelegate {
         let diary = self.diaryList[indexPath.row]
         viewController.diary = diary
         viewController.indexPath = indexPath
-        viewController.delegate = self
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -128,13 +150,3 @@ extension ViewController: WriteDiaryViewDelegate {
     
 }
 
-extension ViewController: DiaryDetailViewDelegate {
-    func didSelectDelete(indexPath: IndexPath) {
-        self.diaryList.remove(at: indexPath.row)
-        self.collectionView.deleteItems(at: [indexPath])
-    }
-    
-    func didSelectFavorite(indexPath: IndexPath, isFavorite: Bool) {
-        self.diaryList[indexPath.row].isFavorite = isFavorite
-    }
-}
