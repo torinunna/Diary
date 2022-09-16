@@ -16,11 +16,22 @@ class FavoriteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCollectionView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         self.loadFavoriteList()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(editDiaryNotification(_:)),
+            name: NSNotification.Name("editDiary"),
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(favoriteDiaryNotification(_:)),
+            name: NSNotification.Name("favoriteDiary"),
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(deleteDiaryNotification(_:)),
+            name: NSNotification.Name("deleteDiary"),
+            object: nil)
     }
     
     private func configureCollectionView() {
@@ -51,10 +62,33 @@ class FavoriteViewController: UIViewController {
         }).sorted(by: {
             $0.date.compare($1.date) == .orderedDescending
         })
+    }
+    
+    @objc func editDiaryNotification(_ notification: Notification) {
+        guard let diary = notification.object as? Diary else { return }
+        guard let row = notification.userInfo?["indexPath.row"] as? Int else { return }
+        self.diaryList[row] = diary
+        self.diaryList = self.diaryList.sorted(by: {
+            $0.date.compare($1.date) == .orderedDescending
+        })
         self.collectionView.reloadData()
     }
- 
-
+    
+    @objc func favoriteDiaryNotification(_ notification: Notification) {
+        guard let favoriteDiary = notification.object as? [String: Any] else { return }
+        guard let isFavorite = favoriteDiary["isFavorite"] as? Bool else { return }
+        guard let indexPath = favoriteDiary["indexPath.row"] as? IndexPath else { return }
+        if !isFavorite {
+            self.diaryList.remove(at: indexPath.row)
+            self.collectionView.deleteItems(at: [indexPath])
+        }
+    }
+    
+    @objc func deleteDiaryNotification(_ notification:  Notification) {
+        guard let indexPath = notification.object as? IndexPath else { return }
+        self.diaryList.remove(at: indexPath.row)
+        self.collectionView.deleteItems(at: [indexPath])
+    }
 }
 
 extension FavoriteViewController: UICollectionViewDataSource {
