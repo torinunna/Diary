@@ -48,24 +48,6 @@ class DiaryDetailViewController: UIViewController {
         self.configureView()
     }
     
-    @objc func favoritePressed() {
-        guard let isFavorite = self.diary?.isFavorite else { return }
-        guard let indexPath = self.indexPath else { return }
-        if isFavorite {
-            self.favoriteButton?.image = UIImage(systemName: "star")
-        } else {
-            self.favoriteButton?.image = UIImage(systemName: "star.fill")
-        }
-        self.diary?.isFavorite = !isFavorite
-        NotificationCenter.default.post(
-            name: NSNotification.Name("favoriteDiary"),
-            object: [
-                "isFavorite": self.diary?.isFavorite ?? false,
-                "indexPath": indexPath
-            ],
-            userInfo: nil)
-    }
-    
     @IBAction func editPressed(_ sender: UIButton) {
         guard let viewController = self.storyboard?.instantiateViewController(identifier: "WriteDiaryViewController") as? WriteDiaryViewController else { return }
         guard let indexPath = self.indexPath else { return }
@@ -88,6 +70,25 @@ class DiaryDetailViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @objc func favoritePressed() {
+        guard let isFavorite = self.diary?.isFavorite else { return }
+        guard let indexPath = self.indexPath else { return }
+        if isFavorite {
+            self.favoriteButton?.image = UIImage(systemName: "star")
+        } else {
+            self.favoriteButton?.image = UIImage(systemName: "star.fill")
+        }
+        self.diary?.isFavorite = !isFavorite
+        NotificationCenter.default.post(
+            name: NSNotification.Name("favoriteDiary"),
+            object: [
+                "diary": self.diary,
+                "isFavorite": self.diary?.isFavorite ?? false,
+                "indexPath": indexPath
+            ],
+            userInfo: nil)
+    }
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

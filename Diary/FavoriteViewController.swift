@@ -76,9 +76,16 @@ class FavoriteViewController: UIViewController {
     
     @objc func favoriteDiaryNotification(_ notification: Notification) {
         guard let favoriteDiary = notification.object as? [String: Any] else { return }
+        guard let diary = favoriteDiary["diary"] as? Diary else { return }
         guard let isFavorite = favoriteDiary["isFavorite"] as? Bool else { return }
-        guard let indexPath = favoriteDiary["indexPath.row"] as? IndexPath else { return }
-        if !isFavorite {
+        guard let indexPath = favoriteDiary["indexPath"] as? IndexPath else { return }
+        if isFavorite {
+            self.diaryList.append(diary)
+            self.diaryList = self.diaryList.sorted(by: {
+                $0.date.compare($1.date) == .orderedDescending
+            })
+            self.collectionView.reloadData()
+        } else {
             self.diaryList.remove(at: indexPath.row)
             self.collectionView.deleteItems(at: [indexPath])
         }
